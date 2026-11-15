@@ -87,31 +87,70 @@ let branches=JSON.parse(localStorage.getItem('f1_branches')||'null')||[
 {code:'B002',name:'لقی ٢',place:'هەولێر',staff:1,managerName:'',managerId:'',shifts:'بەیانی، ئێوارە، شەو'},
 {code:'B003',name:'لقی ٣',place:'دهۆک',staff:0,managerName:'',managerId:'',shifts:'بەیانی، ئێوارە، شەو'}];
 let attendance=JSON.parse(localStorage.getItem('f1_attendance')||'[]'), audit=JSON.parse(localStorage.getItem('f1_audit')||'[]');
-function save(){localStorage.setItem('f1_employees',JSON.stringify(employees));localStorage.setItem('f1_branches',JSON.stringify(branches));localStorage.setItem('f1_attendance',JSON.stringify(attendance));localStorage.setItem('f1_audit',JSON.stringify(audit))}
-function log(msg){audit.unshift({msg,time:new Date().toLocaleString()});save();renderAudit()}
-const roleNames={general:'بەڕێوەبەری گشتی',central:'بەڕێوەبەری ناوەندی',branch:'بەڕێوەبەری لق',employee:'کارمەند'};
-const branchScope='لقی ١', employeeScope='F1001';
-function scopedEmployees(){if(role==='branch')return employees.filter(e=>e.branch===branchScope);if(role==='employee')return employees.filter(e=>e.id===employeeScope);return employees}
-function scopedAttendance(){if(role==='branch')return attendance.filter(a=>a.branch===branchScope);if(role==='employee')return attendance.filter(a=>a.employeeId===employeeScope || a.name===(employees.find(e=>e.id===employeeScope)?.name));return attendance}
-function canSee(page){const map={general:['dashboard','employees','branches','attendance','reports','audit'],central:['dashboard','employees','branches','attendance','reports','audit'],branch:['dashboard','employees','attendance','reports'],employee:['dashboard','attendance','reports']};return map[role].includes(page)}
-function canEditEmployees(){return role==='general'||role==='branch'}
-function canEditBranches(){return role==='general'}
-function login(){if(!$('loginId').value.trim()||!$('loginPass').value){alert('زانیاریی چوونەژوورەوە پڕ بکەرەوە');return}role=$('loginRole').value;$('login').classList.add('hidden');$('app').classList.remove('hidden');$('roleName').textContent=roleNames[role]+(role==='branch'?' · لقی ١':role==='employee'?' · F1001':'');document.querySelectorAll('.nav button').forEach(b=>{const page=b.dataset.page;b.classList.toggle('hidden',!canSee(page))});document.querySelectorAll('[data-admin-only="true"]').forEach(el=>el.classList.toggle('hidden',!canEditBranches()));document.querySelectorAll('[data-employee-edit="true"]').forEach(el=>el.classList.toggle('hidden',!canEditEmployees()));$('recordAttendanceBtn').classList.toggle('hidden',role==='employee'||role==='central');log('چوونەژوورەوەی دیمۆ: '+roleNames[role]);showPage('dashboard')}
-function logout(){$('app').classList.add('hidden');$('login').classList.remove('hidden')}
-function showPage(p){currentPage=p;document.querySelectorAll('.page').forEach(x=>x.classList.add('hidden'));$(p).classList.remove('hidden');document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===p));$('pageTitle').textContent={dashboard:'داشبۆرد',employees:'کارمەندان',branches:'لقەکان',attendance:'دەوام',reports:'ڕاپۆرتەکان',audit:'تۆماری کردارەکان'}[p];if(p==='employees')renderEmployees();if(p==='branches')renderBranches();if(p==='attendance')renderAttendance();if(p==='audit')renderAudit();if(p==='reports')renderReports();renderDashboard();$('sidebar').classList.remove('open')}
-document.querySelectorAll('.nav button').forEach(b=>b.addEventListener('click',()=>showPage(b.dataset.page)));
-function renderDashboard(){const aa=scopedAttendance(),ee=scopedEmployees();$('employeeCount').textContent=role==='general'||role==='central'?'20,000':ee.length;$('branchCount').textContent=role==='general'||role==='central'?'750':role==='branch'?'1':'—';$('presentCount').textContent=aa.filter(a=>a.status==='ئامادە').length;$('absenceCount').textContent=aa.filter(a=>a.status==='غیاب').length;$('recentAttendance').innerHTML=aa.length?'<div class="table-wrap"><table><tr><th>کارمەند</th><th>کات</th><th>دۆخ</th></tr>'+aa.slice(0,5).map(a=>`<tr><td>${a.name}</td><td>${a.time}</td><td><span class="pill green">${a.status}</span></td></tr>`).join('')+'</table></div>':'<div class="empty">هیچ تۆمارێک نییە.</div>'}
-function renderEmployees(){let q=($('empSearch')?.value||'').toLowerCase();$('employeeRows').innerHTML=scopedEmployees().filter(e=>(e.name+e.id+e.phone).toLowerCase().includes(q)).map(e=>`<tr><td>${e.id}</td><td>${e.name}</td><td>${e.phone}</td><td>${e.branch}</td><td>${e.shift}</td><td><span class="pill green">${e.status}</span></td></tr>`).join('')}
-function addEmployee(){if(!canEditEmployees()){alert('دەسەڵاتی زیادکردنی کارمەندت نییە');return}let name=prompt('ناوی کارمەند:');if(!name)return;let id=prompt('ژمارەی کارمەندی:','F'+(1000+employees.length+1));if(!id)return;if(employees.some(e=>e.id===id)){alert('ئەم ژمارەیە پێشتر بەکارهاتووە');return}let phone=prompt('ژمارەی مۆبایل:','');let branch=role==='branch'?branchScope:prompt('ناوی لق:','لقی ١');let shift=prompt('شفت (بەیانی/ئێوارە/شەو):','بەیانی');employees.push({id,name,phone:phone||'',branch:branch||'لقی ١',shift:shift||'بەیانی',status:'چالاک'});save();log('زیادکردنی کارمەند '+id);renderEmployees()}
-function renderBranches(){let q=($('branchSearch')?.value||'').toLowerCase();$('branchRows').innerHTML=branches.filter(b=>(b.name+b.code+b.place+(b.managerName||'')+(b.managerId||'')).toLowerCase().includes(q)).map(b=>`<tr><td>${b.code}</td><td>${b.name}</td><td>${b.place}</td><td>${b.staff}</td><td>${b.managerName||'دیاری نەکراوە'}</td><td>${b.managerId||'—'}</td><td>${b.shifts}</td></tr>`).join('')}
-function addBranch(){if(!canEditBranches()){alert('تەنها بەڕێوەبەری گشتی دەتوانێت لق زیاد بکات');return}let options='<option value="">بەڕێوەبەر هەڵبژێرە</option>'+employees.map(e=>`<option value="${e.id}">${e.name} — ${e.id}</option>`).join('');$('newBranchManager').innerHTML=options;$('newBranchName').value='';$('newBranchPlace').value='';$('branchModal').classList.remove('hidden')}
-function closeBranchModal(){$('branchModal').classList.add('hidden')}
-function saveBranch(){if(!canEditBranches()){alert('تەنها بەڕێوەبەری گشتی دەتوانێت لق زیاد بکات');return}let name=$('newBranchName').value.trim(),place=$('newBranchPlace').value.trim(),managerId=$('newBranchManager').value;if(!name||!place||!managerId){alert('تکایە ناوی لق، شوێن و بەڕێوەبەر دیاری بکە');return}if(branches.some(b=>b.name.trim()===name)){alert('ئەم ناوی لقە پێشتر هەیە');return}let manager=employees.find(e=>e.id===managerId);if(!manager){alert('بەڕێوەبەر لە لیستی کارمەندان نەدۆزرایەوە');return}let code='B'+String(Math.max(0,...branches.map(b=>parseInt(String(b.code||'').replace(/\D/g,''),10)||0))+1).padStart(3,'0');branches.push({code,name,place,staff:employees.filter(e=>e.branch===name).length,managerName:manager.name,managerId:manager.id,shifts:'بەیانی، ئێوارە، شەو'});save();log('زیادکردنی لق '+name+' بە بەڕێوەبەری '+manager.name);closeBranchModal();renderBranches()}
-function recordAttendance(){if(role==='employee'){alert('لە وەشانی داهاتوودا تۆمارکردن بە QRی لق دەکرێت؛ لەم دیمۆیەدا تۆمارکردنی دەستی بۆ کارمەند ناچالاکە.');return}let emp=employees[0];if(!emp){alert('سەرەتا کارمەند زیاد بکە');return}let status=confirm('OK = ئامادەبوون، Cancel = غیاب')?'ئامادە':'غیاب';let finish=pos=>{let gps=pos?pos.coords.latitude.toFixed(4)+', '+pos.coords.longitude.toFixed(4):'بەردەست نییە';attendance.unshift({employeeId:emp.id,name:emp.name,branch:emp.branch,shift:emp.shift,time:new Date().toLocaleString(),gps,status,review:'پێویستی بە پێداچوونەوە'});save();log('تۆمارکردنی '+status+' بۆ '+emp.id);renderAttendance();renderDashboard()};if(navigator.geolocation){navigator.geolocation.getCurrentPosition(finish,()=>finish(null),{timeout:5000})}else finish(null)}
-function renderAttendance(){const aa=scopedAttendance();$('attendanceRows').innerHTML=aa.map(a=>{const i=attendance.indexOf(a);return `<tr><td>${a.name}</td><td>${a.branch}</td><td>${a.shift}</td><td>${a.time}</td><td>${a.gps}</td><td><span class="pill ${a.status==='ئامادە'?'green':'red'}">${a.status}</span></td><td>${role==='employee'?'—':`<button class="ghost" onclick="reviewAttendance(${i})">پێداچوونەوە</button>`}</td></tr>`}).join('')}
-function reviewAttendance(i){if(role==='central'||role==='employee'||(role==='branch'&&attendance[i]?.branch!==branchScope)){alert('دەسەڵاتی گۆڕینی ئەم تۆمارە نییە');return}let decision=prompt('بڕیار بنووسە (پەسەندکرا / ڕەتکرایەوە / لەژێر پێداچوەوەدایە):','لەژێر پێداچوەوەدایە');if(!decision)return;attendance[i].review=decision;save();log('پێداچوونەوەی تۆماری دەوام: '+decision);renderAttendance()}
-function renderReports(){const aa=scopedAttendance(),ee=scopedEmployees();$('reportSummary').textContent=`کۆی تۆمارەکان: ${aa.length} | ئامادە: ${aa.filter(a=>a.status==='ئامادە').length} | غیاب: ${aa.filter(a=>a.status==='غیاب').length} | کارمەندانی پیشاندراو: ${ee.length} | ${role==='general'||role==='central'?'لقەکانی نموونە: '+branches.length:'سنووری بینین: '+(role==='branch'?'لقی ١':'تەنها زانیاریی خۆت')}`}
-function renderAudit(){$('auditRows').innerHTML=audit.length?audit.map(a=>`<div style="padding:10px;border-bottom:1px solid var(--line)"><b>${a.msg}</b><div class="muted">${a.time}</div></div>`).join(''):'هیچ کردارێک تۆمار نەکراوە.'}
-function exportCSV(kind){let ee=scopedEmployees(),aa=scopedAttendance();let rows=kind==='employees'?[['ژمارە','ناو','مۆبایل','لق','شفت'],...ee.map(e=>[e.id,e.name,e.phone,e.branch,e.shift])]:kind==='branches'?[['کۆد','لق','شوێن','کارمەند'],...branches.map(b=>[b.code,b.name,b.place,b.staff])]:[['کارمەند','لق','شفت','کات','GPS','دۆخ','پێداچوونەوە'],...aa.map(a=>[a.name,a.branch,a.shift,a.time,a.gps,a.status,a.review])];let csv='\ufeff'+rows.map(r=>r.map(x=>'"'+String(x??'').replaceAll('"','""')+'"').join(',')).join('\n');let blob=new Blob([csv],{type:'text/csv;charset=utf-8;'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='farmandayi-deferi1-'+kind+'.csv';a.click();URL.revokeObjectURL(url);log('دەرکردنی ڕاپۆرت '+kind)}
-</script>
-</body></html>
+
+function recordAttendance(){
+  if(role==='employee'){
+    alert('تۆمارکردن بۆ کارمەند لەم دیمۆیەدا ناچالاکە');
+    return;
+  }
+
+  const list=scopedEmployees();
+  if(!list.length){
+    alert('هیچ کارمەندێک لەم لقەدا نییە');
+    return;
+  }
+
+  const menu=list.map((e,i)=>
+    (i+1)+'. '+e.name+' — '+e.id+' ('+e.branch+')'
+  ).join('\n');
+
+  const choice=prompt(
+    'ژمارەی کارمەند هەڵبژێرە:\n'+menu
+  );
+
+  if(choice===null)return;
+
+  const n=Number(choice);
+  if(!Number.isInteger(n)||n<1||n>list.length){
+    alert('ژمارەی هەڵبژێردراو دروست نییە');
+    return;
+  }
+
+  const emp=list[n-1];
+  const status=confirm(
+    'OK = ئامادەبوون، Cancel = غیاب'
+  )?'ئامادە':'غیاب';
+
+  const finish=pos=>{
+    const gps=pos
+      ?pos.coords.latitude.toFixed(4)+', '+pos.coords.longitude.toFixed(4)
+      :'بەردەست نییە';
+
+    attendance.unshift({
+      employeeId:emp.id,
+      name:emp.name,
+      branch:emp.branch,
+      shift:emp.shift,
+      time:new Date().toLocaleString(),
+      gps,
+      status,
+      review:'پێویستی بە پێداچوونەوە'
+    });
+
+    save();
+    log('تۆمارکردنی '+status+' بۆ '+emp.id);
+    renderAttendance();
+    renderDashboard();
+    alert('تۆمارکردن سەرکەوتوو بوو');
+  };
+
+  if(navigator.geolocation){
+    navigator.geolocation.getCurrentPosition(
+      finish,
+      ()=>finish(null),
+      {timeout:5000}
+    );
+  }else{
+    finish(null);
+  }
+}
