@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="ku" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>فەرماندەی دەفەری ١</title>
+<style>
+:root{--bg:#f3f6fb;--card:#fff;--ink:#172033;--muted:#68758a;--line:#e5eaf1;--nav:#111c35;--blue:#315efb;--green:#14865b;--red:#c53d4b;--gold:#b7791f}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Tahoma,Arial,sans-serif}button,input,select{font:inherit}button{cursor:pointer;border:0;border-radius:10px;padding:10px 14px;background:var(--blue);color:white;font-weight:700}.ghost{background:#edf1ff;color:#2949bf}.danger{background:#fff0f1;color:var(--red)}.layout{min-height:100vh;display:grid;grid-template-columns:250px 1fr}.sidebar{background:var(--nav);color:#fff;padding:22px 16px}.brand{font-size:19px;font-weight:800;line-height:1.8;margin-bottom:24px}.brand small{display:block;color:#aab7d2;font-size:11px;letter-spacing:1px}.nav button{width:100%;text-align:right;background:transparent;color:#cbd5e8;margin:3px 0;padding:12px}.nav button.active,.nav button:hover{background:#263657;color:#fff}.main{padding:22px;min-width:0}.top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:22px}.top h1{font-size:22px;margin:0}.muted{color:var(--muted);font-size:13px}.user{display:flex;align-items:center;gap:10px}.avatar{width:38px;height:38px;border-radius:50%;background:#dce5ff;color:#2446b5;display:grid;place-items:center;font-weight:bold}.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}.card{background:var(--card);border:1px solid var(--line);border-radius:15px;padding:17px;box-shadow:0 4px 15px #15284b08}.metric{font-size:28px;font-weight:800;margin:10px 0 4px}.metric-label{font-size:13px;color:var(--muted)}.section{margin-top:18px}.section-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px}.section-head h2{font-size:17px;margin:0}.table-wrap{overflow:auto}table{width:100%;border-collapse:collapse;min-width:650px}th,td{padding:12px 10px;border-bottom:1px solid var(--line);text-align:right;font-size:13px}th{color:var(--muted);font-weight:700;background:#fafbfd}.pill{display:inline-block;border-radius:20px;padding:4px 9px;font-size:11px;background:#edf1ff;color:#3452bd}.pill.green{background:#e8f7ef;color:var(--green)}.pill.red{background:#fff0f1;color:var(--red)}.pill.gold{background:#fff6df;color:var(--gold)}.actions{display:flex;gap:8px;flex-wrap:wrap}.field{display:flex;flex-direction:column;gap:6px;margin:10px 0}.field label{font-size:12px;color:var(--muted)}input,select{padding:11px;border:1px solid var(--line);border-radius:9px;background:#fff;min-width:0}.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.hidden{display:none!important}.notice{padding:12px 14px;background:#fff8e8;border:1px solid #f4dfaa;color:#805b13;border-radius:10px;font-size:12px;line-height:1.8}.login{max-width:420px;margin:7vh auto;padding:26px}.login h1{font-size:22px}.login button{width:100%;margin-top:10px}.empty{padding:30px;text-align:center;color:var(--muted)}.toolbar{display:flex;gap:8px;flex-wrap:wrap}.search{max-width:260px}.footer{margin-top:25px;color:#8a94a6;font-size:11px}.mobile-menu{display:none}
+@media(max-width:900px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.layout{grid-template-columns:205px 1fr}.main{padding:16px}}
+@media(max-width:650px){.layout{display:block}.sidebar{padding:12px;display:none}.sidebar.open{display:block}.brand{margin:0 0 8px}.nav{display:grid;grid-template-columns:repeat(2,1fr)}.nav button{text-align:center;font-size:12px;padding:9px}.main{padding:13px}.mobile-menu{display:inline-block}.top h1{font-size:17px}.grid{gap:9px}.card{padding:13px}.metric{font-size:23px}.form-grid{grid-template-columns:1fr}.top{align-items:flex-start}}
+@media print{.sidebar,.top button,.toolbar,.actions,.notice{display:none!important}.layout{display:block}.main{padding:0}.card{box-shadow:none;break-inside:avoid}}
+</style>
+</head>
+<body>
+<div id="login" class="card login">
+  <div class="brand">فەرماندەی دەفەری ١<small>STAFF & ATTENDANCE MANAGEMENT</small></div>
+  <h1>چوونەژوورەوە</h1><p class="muted">بۆ تاقیکردنەوەی وەشانی یەکەم، زانیاریی نموونە بەکاربهێنە.</p>
+  <div class="field"><label>ژمارەی مۆبایل یان ژمارەی کارمەندی</label><input id="loginId" value="admin" placeholder="ژمارەی مۆبایل / کارمەندی"></div>
+  <div class="field"><label>وشەی نهێنی</label><input id="loginPass" type="password" value="demo123" placeholder="وشەی نهێنی"></div>
+  <div class="field"><label>ئاستی دەسەڵات (تەنها بۆ دیمۆ)</label><select id="loginRole"><option value="general">بەڕێوەبەری گشتی</option><option value="central">بەڕێوەبەری ناوەندی</option><option value="branch">بەڕێوەبەری لق</option><option value="employee">کارمەند</option></select></div>
+  <button onclick="login()">چوونەژوورەوە</button>
+  <p class="muted">دیمۆ: admin / demo123</p>
+</div>
+<div id="app" class="layout hidden">
+<aside class="sidebar" id="sidebar"><div class="brand">فەرماندەی دەفەری ١<small>COMMAND CENTER</small></div><div class="nav" id="nav">
+<button class="active" data-page="dashboard">▦ داشبۆرد</button><button data-page="employees">♙ کارمەندان</button><button data-page="branches">⌂ لقەکان</button><button data-page="attendance">◷ دەوام</button><button data-page="reports">▤ ڕاپۆرتەکان</button><button data-page="audit">◉ تۆماری کردارەکان</button>
+</div></aside>
+<main class="main">
+<header class="top"><div style="display:flex;align-items:center;gap:10px"><button class="mobile-menu ghost" onclick="document.getElementById('sidebar').classList.toggle('open')">☰</button><div><h1 id="pageTitle">داشبۆرد</h1><div class="muted">بەخێربێیت بۆ سیستەمی بەڕێوەبردنی دەوام</div></div></div><div class="user"><div><b id="roleName">بەڕێوەبەری گشتی</b><div class="muted">دیمۆی وەشانی یەکەم</div></div><div class="avatar">ف١</div><button class="ghost" onclick="logout()">دەرچوون</button></div></header>
+<div class="notice">ئەمە وەشانی نموونەییە (Prototype). داتاکان لە وێبگەڕی ئامێرەکەتدا هەڵدەگیرێن؛ هێشتا سێرڤەر، داتابەیسی هاوبەش، چوونەژوورەوەی پارێزراو، QR و GPS ـی بەرهەمهێنان تێدا چالاک نەکراون. بۆ بەکارهێنانی فەرمی پێویستی بە دامەزراندنی backend و پاراستنی داتا هەیە.</div>
+<section id="dashboard" class="page">
+<div class="grid section">
+<div class="card"><div class="metric-label">کۆی لقەکان</div><div class="metric" id="branchCount">750</div><span class="pill">ئامانجی سیستەم</span></div>
+<div class="card"><div class="metric-label">کۆی کارمەندان</div><div class="metric" id="employeeCount">20,000</div><span class="pill">ئامانجی سیستەم</span></div>
+<div class="card"><div class="metric-label">ئامادەبوونی ئەمڕۆ</div><div class="metric" id="presentCount">0</div><span class="pill green">تۆمارکراو لەم دیمۆیەدا</span></div>
+<div class="card"><div class="metric-label">غیاب</div><div class="metric" id="absenceCount">0</div><span class="pill red">پێویستی بە پێداچوونەوە</span></div>
+</div>
+<div class="section card"><div class="section-head"><h2>کورتەی چاودێری</h2><span class="pill">٣ شفت</span></div><div class="grid"><div><b>بەیانی</b><p class="muted">کاتی لقەکان دیاری دەکەن</p></div><div><b>ئێوارە</b><p class="muted">کاتی لقەکان دیاری دەکەن</p></div><div><b>شەو</b><p class="muted">پشتیوانی دەوامی شەوانە</p></div><div><b>بەڕێوەبردن</b><p class="muted">٤ ئاستی دەسەڵات</p></div></div></div>
+<div class="section card"><div class="section-head"><h2>دوایین تۆمارەکانی دەوام</h2><button class="ghost" onclick="showPage('attendance')">بینینی هەموو</button></div><div id="recentAttendance" class="empty">هیچ تۆمارێک نییە.</div></div>
+</section>
+<section id="employees" class="page hidden">
+<div class="section-head"><h2>بەڕێوەبردنی کارمەندان</h2><button onclick="addEmployee()">+ زیادکردنی کارمەند</button></div>
+<div class="toolbar"><input class="search" id="empSearch" placeholder="گەڕان بە ناو یان ژمارە..." oninput="renderEmployees()"><button class="ghost" onclick="exportCSV('employees')">دەرکردنی Excel/CSV</button></div>
+<div class="card section table-wrap"><table><thead><tr><th>ژمارە</th><th>ناو</th><th>مۆبایل</th><th>لق</th><th>شفت</th><th>دۆخ</th></tr></thead><tbody id="employeeRows"></tbody></table></div>
+</section>
+<section id="branches" class="page hidden">
+<div class="section-head"><h2>بەڕێوەبردنی لقەکان</h2><button onclick="addBranch()">+ زیادکردنی لق</button></div>
+<div class="toolbar"><input class="search" id="branchSearch" placeholder="گەڕان بە ناوی لق..." oninput="renderBranches()"><button class="ghost" onclick="exportCSV('branches')">دەرکردنی Excel/CSV</button></div>
+<div class="card section table-wrap"><table><thead><tr><th>کۆد</th><th>ناوی لق</th><th>شوێن</th><th>ژمارەی کارمەند</th><th>شفتەکان</th></tr></thead><tbody id="branchRows"></tbody></table></div>
+</section>
+<section id="attendance" class="page hidden">
+<div class="section-head"><h2>تۆمارکردنی دەوام</h2><button onclick="recordAttendance()">+ تۆمارکردنی هاتن</button></div>
+<div class="notice">لە دیمۆدا تۆمارکردن بە ناوی کارمەندی نموونەییە. GPS ئەگەر ڕێگەپێدراو بێت، شوێنی ئامێر دەخوێنێتەوە؛ ئەمە بەڵگەی پشتڕاستکراوی لق نییە.</div>
+<div class="card section table-wrap"><table><thead><tr><th>کارمەند</th><th>لق</th><th>شفت</th><th>کات</th><th>GPS</th><th>دۆخ</th><th>پێداچوونەوە</th></tr></thead><tbody id="attendanceRows"></tbody></table></div>
+</section>
+<section id="reports" class="page hidden">
+<div class="section-head"><h2>ڕاپۆرتەکان</h2><div class="toolbar"><button onclick="window.print()">PDF / چاپکردن</button><button class="ghost" onclick="exportCSV('all')">Excel / CSV</button></div></div>
+<div class="grid"><div class="card"><b>ئامادەبوونی ڕۆژانە</b><p class="muted">کاتی هاتن و ڕۆیشتن</p></div><div class="card"><b>غیاب</b><p class="muted">تۆمار و هۆکار</p></div><div class="card"><b>دواکەوتن</b><p class="muted">بەپێی کاتی شفت</p></div><div class="card"><b>بەراوردی لقەکان</b><p class="muted">٧٥٠ لق</p></div><div class="card"><b>کارمەندان</b><p class="muted">٢٠,٠٠٠ کارمەند</p></div><div class="card"><b>سێ شفت</b><p class="muted">بەیانی، ئێوارە، شەو</p></div></div>
+<div class="card section"><h3>ڕاپۆرتی تۆمارەکانی دیمۆ</h3><div id="reportSummary" class="muted">هێشتا داتا نییە.</div></div>
+</section>
+<section id="audit" class="page hidden">
+<div class="section-head"><h2>تۆماری کردارەکان</h2></div>
+<div class="card"><div class="notice">لە وەشانی فەرمی، هەموو کردارەکان لە سێرڤەری ناوەندی بە شێوەی نەگۆڕاو تۆمار دەکرێن. ئەم بەشە لە دیمۆدا تەنها کردارەکانی ئەم وێبگەڕە پیشان دەدات.</div><div id="auditRows" class="section empty">هیچ کردارێک تۆمار نەکراوە.</div></div>
+</section>
+<div class="footer">فەرماندەی دەفەری ١ · وەشانی نموونەیی 0.1 · پێویستی بە دامەزراندنی سێرڤەر بۆ بەکارهێنانی فەرمی هەیە.</div>
+</main></div>
+<script>
+const $=id=>document.getElementById(id);
+let role='general', currentPage='dashboard';
+let employees=JSON.parse(localStorage.getItem('f1_employees')||'null')||[
+{id:'F1001',name:'کارمەندی نموونە ١',phone:'07500000001',branch:'لقی ١',shift:'بەیانی',status:'چالاک'},
+{id:'F1002',name:'کارمەندی نموونە ٢',phone:'07500000002',branch:'لقی ٢',shift:'ئێوارە',status:'چالاک'},
+{id:'F1003',name:'کارمەندی نموونە ٣',phone:'07500000003',branch:'لقی ١',shift:'شەو',status:'چالاک'}];
+let branches=JSON.parse(localStorage.getItem('f1_branches')||'null')||[
+{code:'B001',name:'لقی ١',place:'هەولێر',staff:2,shifts:'بەیانی، ئێوارە، شەو'},
+{code:'B002',name:'لقی ٢',place:'هەولێر',staff:1,shifts:'بەیانی، ئێوارە، شەو'},
+{code:'B003',name:'لقی ٣',place:'دهۆک',staff:0,shifts:'بەیانی، ئێوارە، شەو'}];
+let attendance=JSON.parse(localStorage.getItem('f1_attendance')||'[]'), audit=JSON.parse(localStorage.getItem('f1_audit')||'[]');
+function save(){localStorage.setItem('f1_employees',JSON.stringify(employees));localStorage.setItem('f1_branches',JSON.stringify(branches));localStorage.setItem('f1_attendance',JSON.stringify(attendance));localStorage.setItem('f1_audit',JSON.stringify(audit))}
+function log(msg){audit.unshift({msg,time:new Date().toLocaleString()});save();renderAudit()}
+function login(){if(!$('loginId').value.trim()||!$('loginPass').value){alert('زانیاریی چوونەژوورەوە پڕ بکەرەوە');return}role=$('loginRole').value;$('login').classList.add('hidden');$('app').classList.remove('hidden');$('roleName').textContent={general:'بەڕێوەبەری گشتی',central:'بەڕێوەبەری ناوەندی',branch:'بەڕێوەبەری لق',employee:'کارمەند'}[role];log('چوونەژوورەوەی دیمۆ');showPage('dashboard')}
+function logout(){$('app').classList.add('hidden');$('login').classList.remove('hidden')}
+function showPage(p){currentPage=p;document.querySelectorAll('.page').forEach(x=>x.classList.add('hidden'));$(p).classList.remove('hidden');document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===p));$('pageTitle').textContent={dashboard:'داشبۆرد',employees:'کارمەندان',branches:'لقەکان',attendance:'دەوام',reports:'ڕاپۆرتەکان',audit:'تۆماری کردارەکان'}[p];if(p==='employees')renderEmployees();if(p==='branches')renderBranches();if(p==='attendance')renderAttendance();if(p==='audit')renderAudit();if(p==='reports')renderReports();renderDashboard();$('sidebar').classList.remove('open')}
+document.querySelectorAll('.nav button').forEach(b=>b.addEventListener('click',()=>showPage(b.dataset.page)));
+function renderDashboard(){$('employeeCount').textContent='20,000';$('branchCount').textContent='750';$('presentCount').textContent=attendance.filter(a=>a.status==='ئامادە').length;$('absenceCount').textContent=attendance.filter(a=>a.status==='غیاب').length;$('recentAttendance').innerHTML=attendance.length?'<div class="table-wrap"><table><tr><th>کارمەند</th><th>کات</th><th>دۆخ</th></tr>'+attendance.slice(0,5).map(a=>`<tr><td>${a.name}</td><td>${a.time}</td><td><span class="pill green">${a.status}</span></td></tr>`).join('')+'</table></div>':'<div class="empty">هیچ تۆمارێک نییە.</div>'}
+function renderEmployees(){let q=($('empSearch')?.value||'').toLowerCase();$('employeeRows').innerHTML=employees.filter(e=>(e.name+e.id+e.phone).toLowerCase().includes(q)).map(e=>`<tr><td>${e.id}</td><td>${e.name}</td><td>${e.phone}</td><td>${e.branch}</td><td>${e.shift}</td><td><span class="pill green">${e.status}</span></td></tr>`).join('')}
+function addEmployee(){let name=prompt('ناوی کارمەند:');if(!name)return;let id=prompt('ژمارەی کارمەندی:','F'+(1000+employees.length+1));if(!id)return;let phone=prompt('ژمارەی مۆبایل:','');let branch=prompt('ناوی لق:','لقی ١');let shift=prompt('شفت (بەیانی/ئێوارە/شەو):','بەیانی');employees.push({id,name,phone:phone||'',branch:branch||'لقی ١',shift:shift||'بەیانی',status:'چالاک'});save();log('زیادکردنی کارمەند '+id);renderEmployees()}
+function renderBranches(){let q=($('branchSearch')?.value||'').toLowerCase();$('branchRows').innerHTML=branches.filter(b=>(b.name+b.code+b.place).toLowerCase().includes(q)).map(b=>`<tr><td>${b.code}</td><td>${b.name}</td><td>${b.place}</td><td>${b.staff}</td><td>${b.shifts}</td></tr>`).join('')}
+function addBranch(){let name=prompt('ناوی لق:');if(!name)return;let place=prompt('شوێن:','هەولێر');let code='B'+String(branches.length+1).padStart(3,'0');branches.push({code,name,place:place||'',staff:0,shifts:'بەیانی، ئێوارە، شەو'});save();log('زیادکردنی لق '+name);renderBranches()}
+function recordAttendance(){let emp=employees[0];if(!emp){alert('سەرەتا کارمەند زیاد بکە');return}let status=confirm('OK = ئامادەبوون، Cancel = غیاب')?'ئامادە':'غیاب';let finish=pos=>{let gps=pos?pos.coords.latitude.toFixed(4)+', '+pos.coords.longitude.toFixed(4):'بەردەست نییە';attendance.unshift({name:emp.name,branch:emp.branch,shift:emp.shift,time:new Date().toLocaleString(),gps,status,review:'پێویستی بە پێداچوونەوە'});save();log('تۆمارکردنی '+status+' بۆ '+emp.id);renderAttendance();renderDashboard()};if(navigator.geolocation){navigator.geolocation.getCurrentPosition(finish,()=>finish(null),{timeout:5000})}else finish(null)}
+function renderAttendance(){$('attendanceRows').innerHTML=attendance.map((a,i)=>`<tr><td>${a.name}</td><td>${a.branch}</td><td>${a.shift}</td><td>${a.time}</td><td>${a.gps}</td><td><span class="pill ${a.status==='ئامادە'?'green':'red'}">${a.status}</span></td><td><button class="ghost" onclick="reviewAttendance(${i})">پێداچوونەوە</button></td></tr>`).join('')}
+function reviewAttendance(i){let decision=prompt('بڕیار بنووسە (پەسەندکرا / ڕەتکرایەوە / لەژێر پێداچوەوەدایە):','لەژێر پێداچوەوەدایە');if(!decision)return;attendance[i].review=decision;save();log('پێداچوونەوەی تۆماری دەوام: '+decision);renderAttendance()}
+function renderReports(){$('reportSummary').textContent=`کۆی تۆمارەکان: ${attendance.length} | ئامادە: ${attendance.filter(a=>a.status==='ئامادە').length} | غیاب: ${attendance.filter(a=>a.status==='غیاب').length} | کارمەندانی نموونە: ${employees.length} | لقەکانی نموونە: ${branches.length}`}
+function renderAudit(){$('auditRows').innerHTML=audit.length?audit.map(a=>`<div style="padding:10px;border-bottom:1px solid var(--line)"><b>${a.msg}</b><div class="muted">${a.time}</div></div>`).join(''):'هیچ کردارێک تۆمار نەکراوە.'}
+function exportCSV(kind){let rows=kind==='employees'?[['ژمارە','ناو','مۆبایل','لق','شفت'],...employees.map(e=>[e.id,e.name,e.phone,e.branch,e.shift])]:kind==='branches'?[['کۆد','لق','شوێن','کارمەند'],...branches.map(b=>[b.code,b.name,b.place,b.staff])]:[['کارمەند','لق','شفت','کات','GPS','دۆخ','پێداچوونەوە'],...attendance.map(a=>[a.name,a.branch,a.shift,a.time,a.gps,a.status,a.review])];let csv='\ufeff'+rows.map(r=>r.map(x=>'"'+String(x??'').replaceAll('"','""')+'"').join(',')).join('\n');let blob=new Blob([csv],{type:'text/csv;charset=utf-8;'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='farmandayi-deferi1-'+kind+'.csv';a.click();URL.revokeObjectURL(url);log('دەرکردنی ڕاپۆرت '+kind)}
+</script>
+</body></html>
